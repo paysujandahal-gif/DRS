@@ -1,4 +1,4 @@
-we<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Watermark Photo</title>
@@ -80,7 +80,7 @@ function addWatermark() {
         // Text styles
         ctx.fillStyle = "white";
         ctx.lineWidth = fontSize * 0.10; // scale outline
-        ctx.textAlign = "left";
+        ctx.textAlign = "right";
 
         const x = canvas.width - (fontSize * 0.5);
         const y = canvas.height - (fontSize * 0.5);
@@ -96,7 +96,7 @@ function addWatermark() {
 function downloadImage() {
     const canvas = document.getElementById("canvas");
     const link = document.createElement("a");
-    link.download = "vivopicture.png";
+    link.download = "watermarked.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
 }
