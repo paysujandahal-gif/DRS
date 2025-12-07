@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Watermark Photo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 15px;
+            max-width: 700px;
+            margin: auto;
+        }
+        #preview {
+            max-width: 100%;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        button {
+            background: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+        }
+        button:active {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Add Date/Time Watermark to Photo</h2>
+
+<input type="file" id="imageInput" accept="image/*">
+
+<label>Watermark text (date/time):</label>
+<input type="text" id="watermarkText" placeholder="2025-01-01 10:30 AM">
+
+<button onclick="addWatermark()">Add Watermark</button>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<h3>Preview:</h3>
+<img id="preview">
+
+<button id="downloadBtn" style="display:none;" onclick="downloadImage()">Download Image</button>
+
+<script>
+function addWatermark() {
+    const fileInput = document.getElementById("imageInput");
+    const watermark = document.getElementById("watermarkText").value.trim();
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    if (!fileInput.files[0]) {
+        alert("Please upload an image first.");
+        return;
+    }
+
+    const img = new Image();
+    img.src = URL.createObjectURL(fileInput.files[0]);
+
+    img.onload = function () {
+
+        // Set canvas to full resolution of the image
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        ctx.drawImage(img, 0, 0);
+
+        // Dynamic font scaling based on image width
+        const fontSize = Math.max(20, img.width * 0.03); // 3% of width
+        ctx.font = `${fontSize}px Arial`;
+
+        // Text styles
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = fontSize * 0.10; // scale outline
+        ctx.textAlign = "right";
+
+        const x = canvas.width - (fontSize * 0.5);
+        const y = canvas.height - (fontSize * 0.5);
+
+        ctx.strokeText(watermark, x, y);
+        ctx.fillText(watermark, x, y);
+
+        document.getElementById("preview").src = canvas.toDataURL("image/png");
+        document.getElementById("downloadBtn").style.display = "block";
+    };
+}
+
+function downloadImage() {
+    const canvas = document.getElementById("canvas");
+    const link = document.createElement("a");
+    link.download = "watermarked.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+}
+</script>
+
+</body>
+</html>
