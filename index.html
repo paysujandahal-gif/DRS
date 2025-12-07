@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Watermark Photo</title>
+    <title>Watermark Photo (Multi)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Vivo-like system font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             padding: 15px;
-            max-width: 700px;
+            max-width: 800px;
             margin: auto;
         }
-        #preview {
-            max-width: 100%;
+        .preview-item {
             margin-top: 20px;
             border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .preview-item img {
+            width: 100%;
+            border: 1px solid #ddd;
+            margin-top: 10px;
         }
         input, button {
             width: 100%;
@@ -34,71 +43,74 @@
 </head>
 <body>
 
-<h2>Add Date/Time Watermark to Photo</h2>
+<h2>Add Watermark to Multiple Photos</h2>
 
-<input type="file" id="imageInput" accept="image/*">
+<input type="file" id="imageInput" accept="image/*" multiple>
 
-<label>Watermark text (date/time):</label>
+<label>Watermark text:</label>
 <input type="text" id="watermarkText" placeholder="2025-01-01 10:30 AM">
 
 <button onclick="addWatermark()">Add Watermark</button>
 
+<div id="previewContainer"></div>
+
 <canvas id="canvas" style="display:none;"></canvas>
-
-<h3>Preview:</h3>
-<img id="preview">
-
-<button id="downloadBtn" style="display:none;" onclick="downloadImage()">Download Image</button>
 
 <script>
 function addWatermark() {
-    const fileInput = document.getElementById("imageInput");
+    const files = document.getElementById("imageInput").files;
     const watermark = document.getElementById("watermarkText").value.trim();
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+    const container = document.getElementById("previewContainer");
+    container.innerHTML = ""; // reset preview list
 
-    if (!fileInput.files[0]) {
-        alert("Please upload an image first.");
+    if (files.length === 0) {
+        alert("Please upload at least 1 photo.");
         return;
     }
 
-    const img = new Image();
-    img.src = URL.createObjectURL(fileInput.files[0]);
+    Array.from(files).forEach(file => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
 
-    img.onload = function () {
+        img.onload = function () {
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
 
-        // Set canvas to full resolution of the image
-        canvas.width = img.width;
-        canvas.height = img.height;
+            // Match photo resolution
+            canvas.width = img.width;
+            canvas.height = img.height;
 
-        ctx.drawImage(img, 0, 0);
+            ctx.drawImage(img, 0, 0);
 
-        // Dynamic font scaling based on image width
-        const fontSize = Math.max(20, img.width * 0.03); // 3% of width
-        ctx.font = `${fontSize}px Arial`;
+            // Vivo-style font
+            const fontSize = Math.max(20, img.width * 0.03);
+            ctx.font = `${fontSize}px 'Roboto', sans-serif`;
+            ctx.fillStyle = "white";
+            ctx.textAlign = "left";
 
-        // Text styles
-        ctx.fillStyle = "white";
-        ctx.lineWidth = fontSize * 0.10; // scale outline
-        ctx.textAlign = "right";
+            // bottom left position
+            const x = fontSize * 0.5;
+            const y = canvas.height - (fontSize * 0.5);
 
-        const x = canvas.width - (fontSize * 0.5);
-        const y = canvas.height - (fontSize * 0.5);
+            ctx.fillText(watermark, x, y);
 
-        ctx.strokeText(watermark, x, y);
-        ctx.fillText(watermark, x, y);
+            const finalImg = canvas.toDataURL("image/png");
 
-        document.getElementById("preview").src = canvas.toDataURL("image/png");
-        document.getElementById("downloadBtn").style.display = "block";
-    };
-}
+            // Create preview block
+            const block = document.createElement("div");
+            block.className = "preview-item";
 
-function downloadImage() {
-    const canvas = document.getElementById("canvas");
-    const link = document.createElement("a");
-    link.download = "watermarked.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
+            block.innerHTML = `
+                <strong>${file.name}</strong><br>
+                <img src="${finalImg}">
+                <a download="watermarked_${file.name}" href="${finalImg}">
+                    <button>Download This Image</button>
+                </a>
+            `;
+
+            container.appendChild(block);
+        };
+    });
 }
 </script>
 
