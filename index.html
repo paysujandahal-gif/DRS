@@ -3,7 +3,7 @@
 <head>
     <title>Watermark Photo Tool</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #034078 100%);
             min-height: 100vh;
             padding: 20px;
@@ -106,7 +106,7 @@
             border-radius: 10px;
             font-size: 1rem;
             transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
         select {
             cursor: pointer;
@@ -485,16 +485,13 @@
                     ctx.drawImage(img, 0, 0);
                     
                     const fontSize = Math.max(20, img.width * 0.03);
-                    ctx.font = `500 ${fontSize}px 'Inter', 'Roboto', sans-serif`;
+                    ctx.font = `700 ${fontSize}px 'Roboto', sans-serif`;
                     ctx.fillStyle = "white";
-                    ctx.strokeStyle = "rgba(0,0,0,0.5)";
-                    ctx.lineWidth = fontSize * 0.08;
                     ctx.textAlign = "left";
                     
                     const x = fontSize * 0.5;
                     const y = canvas.height - (fontSize * 0.5);
                     
-                    ctx.strokeText(watermark, x, y);
                     ctx.fillText(watermark, x, y);
                     
                     const finalImg = canvas.toDataURL("image/png");
@@ -505,7 +502,7 @@
                         <img src="${finalImg}" alt="${file.name}">
                         <div class="preview-info">
                             <div class="filename" title="${file.name}">${file.name}</div>
-                            <a download="watermarked_${file.name}" href="${finalImg}">
+                            <a download="${file.name}" href="${finalImg}">
                                 <button class="btn-download">Download</button>
                             </a>
                         </div>
