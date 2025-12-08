@@ -1,118 +1,527 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Watermark Photo (Multi)</title>
+    <title>Watermark Photo Tool</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Vivo-like system font -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: 'Roboto', sans-serif;
-            padding: 15px;
-            max-width: 800px;
-            margin: auto;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #034078 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e7ff;
         }
-        .preview-item {
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.6s ease;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            color: #94a3b8;
+        }
+        .card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.6s ease;
+        }
+        .upload-area {
+            border: 2px dashed rgba(59, 130, 246, 0.5);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            background: rgba(30, 41, 59, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background: rgba(30, 41, 59, 0.6);
+            transform: translateY(-2px);
+        }
+        .upload-area.dragover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: #60a5fa;
+        }
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #3b82f6;
+        }
+        .upload-area h3 {
+            color: #60a5fa;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+        .upload-area p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .input-group {
+            margin-top: 25px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            color: #e0e7ff;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            background: rgba(30, 41, 59, 0.5);
+            color: #e0e7ff;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%2360a5fa' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            padding-right: 45px;
+        }
+        select option {
+            background: #1e293b;
+            color: #e0e7ff;
+        }
+        input[type="text"]::placeholder {
+            color: #64748b;
+        }
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(30, 41, 59, 0.7);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        .date-time-section {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+        .date-time-section h3 {
+            color: #60a5fa;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .btn {
+            width: 100%;
+            padding: 16px;
             margin-top: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-        .preview-item img {
-            width: 100%;
-            border: 1px solid #ddd;
-            margin-top: 10px;
-        }
-        input, button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 16px;
-        }
-        button {
-            background: #007bff;
+            font-size: 1.05rem;
+            font-weight: 500;
             border: none;
-            color: white;
-            border-radius: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
         }
-        button:active {
-            opacity: 0.7;
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .preview-grid {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .preview-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            animation: scaleIn 0.4s ease;
+        }
+        .preview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+        .preview-card img {
+            width: 100%;
+            display: block;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .preview-info {
+            padding: 15px;
+        }
+        .preview-info .filename {
+            font-weight: 500;
+            color: #e0e7ff;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .btn-download {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-download:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transform: translateY(-1px);
+        }
+        .file-count {
+            text-align: center;
+            margin-top: 15px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .file-count strong {
+            color: #60a5fa;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            .card {
+                padding: 20px;
+            }
+            .upload-area {
+                padding: 30px 20px;
+            }
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
+            .row {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>Watermark Tool</h1>
+            <p>Add custom watermarks to your photos instantly</p>
+        </div>
+        
+        <div class="card">
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('imageInput').click()">
+                <div class="upload-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <h3>Choose or Drop Photos</h3>
+                <p>Support multiple images • PNG, JPG, JPEG</p>
+                <div class="file-count" id="fileCount"></div>
+            </div>
+            <input type="file" id="imageInput" accept="image/*" multiple>
+            
+            <div class="date-time-section">
+                <h3>Date & Time</h3>
+                <div class="row">
+                    <div class="input-group" style="margin-top: 0;">
+                        <label for="monthSelect">Month</label>
+                        <select id="monthSelect">
+                            <option value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="margin-top: 0;">
+                        <label for="daySelect">Day</label>
+                        <select id="daySelect">
+                            <!-- Days will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="input-group" style="margin-top: 0;">
+                        <label for="yearInput">Year</label>
+                        <input type="text" id="yearInput" placeholder="2025" value="2025">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 15px;">
+                    <div class="input-group" style="margin-top: 0;">
+                        <label for="hourInput">Hour</label>
+                        <input type="text" id="hourInput" placeholder="10" maxlength="2">
+                    </div>
+                    <div class="input-group" style="margin-top: 0;">
+                        <label for="minuteInput">Minute</label>
+                        <input type="text" id="minuteInput" placeholder="30" maxlength="2">
+                    </div>
+                    <div class="input-group" style="margin-top: 0;">
+                        <label for="ampmSelect">AM/PM</label>
+                        <select id="ampmSelect">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
 
-<h2>Add Watermark to Multiple Photos</h2>
-
-<input type="file" id="imageInput" accept="image/*" multiple>
-
-<label>Watermark text:</label>
-<input type="text" id="watermarkText" placeholder="2025-01-01 10:30 AM">
-
-<button onclick="addWatermark()">Add Watermark</button>
-
-<div id="previewContainer"></div>
-
-<canvas id="canvas" style="display:none;"></canvas>
-
-<script>
-function addWatermark() {
-    const files = document.getElementById("imageInput").files;
-    const watermark = document.getElementById("watermarkText").value.trim();
-    const container = document.getElementById("previewContainer");
-    container.innerHTML = ""; // reset preview list
-
-    if (files.length === 0) {
-        alert("Please upload at least 1 photo.");
-        return;
-    }
-
-    Array.from(files).forEach(file => {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-
-        img.onload = function () {
-            const canvas = document.getElementById("canvas");
-            const ctx = canvas.getContext("2d");
-
-            // Match photo resolution
-            canvas.width = img.width;
-            canvas.height = img.height;
-
-            ctx.drawImage(img, 0, 0);
-
-            // Vivo-style font
-            const fontSize = Math.max(20, img.width * 0.03);
-            ctx.font = `${fontSize}px 'Roboto', sans-serif`;
-            ctx.fillStyle = "white";
-            ctx.textAlign = "left";
-
-            // bottom left position
-            const x = fontSize * 0.5;
-            const y = canvas.height - (fontSize * 0.5);
-
-            ctx.fillText(watermark, x, y);
-
-            const finalImg = canvas.toDataURL("image/png");
-
-            // Create preview block
-            const block = document.createElement("div");
-            block.className = "preview-item";
-
-            block.innerHTML = `
-                <strong>${file.name}</strong><br>
-                <img src="${finalImg}">
-                <a download="watermarked_${file.name}" href="${finalImg}">
-                    <button>Download This Image</button>
-                </a>
-            `;
-
-            container.appendChild(block);
-        };
-    });
-}
-</script>
-
+            
+            <button class="btn btn-primary" id="processBtn" onclick="addWatermark()">
+                Add Watermark
+            </button>
+        </div>
+        
+        <div id="previewContainer" class="preview-grid"></div>
+    </div>
+    
+    <canvas id="canvas" style="display:none;"></canvas>
+    
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const fileCount = document.getElementById('fileCount');
+        const processBtn = document.getElementById('processBtn');
+        const daySelect = document.getElementById('daySelect');
+        const monthSelect = document.getElementById('monthSelect');
+        
+        // Populate days dropdown
+        function populateDays() {
+            daySelect.innerHTML = '';
+            for (let i = 1; i <= 31; i++) {
+                const option = document.createElement('option');
+                option.value = i < 10 ? '0' + i : i;
+                option.textContent = i;
+                daySelect.appendChild(option);
+            }
+        }
+        
+        // Initialize with current date
+        function setCurrentDate() {
+            const now = new Date();
+            monthSelect.value = String(now.getMonth() + 1).padStart(2, '0');
+            daySelect.value = String(now.getDate()).padStart(2, '0');
+            document.getElementById('yearInput').value = now.getFullYear();
+            
+            let hours = now.getHours();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 0 should be 12
+            
+            document.getElementById('hourInput').value = String(hours).padStart(2, '0');
+            document.getElementById('minuteInput').value = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('ampmSelect').value = ampm;
+        }
+        
+        populateDays();
+        setCurrentDate();
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            imageInput.files = files;
+            updateFileCount();
+        });
+        
+        imageInput.addEventListener('change', updateFileCount);
+        
+        function updateFileCount() {
+            const files = imageInput.files;
+            if (files.length > 0) {
+                fileCount.innerHTML = `<strong>${files.length}</strong> image${files.length > 1 ? 's' : ''} selected`;
+            } else {
+                fileCount.innerHTML = '';
+            }
+        }
+        
+        function addWatermark() {
+            const files = imageInput.files;
+            const container = document.getElementById("previewContainer");
+            
+            // Get date and time values
+            const monthNum = monthSelect.value;
+            const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            const monthName = monthNames[parseInt(monthNum) - 1];
+            const day = daySelect.value;
+            const year = document.getElementById('yearInput').value.trim();
+            const hour = document.getElementById('hourInput').value.trim().padStart(2, '0');
+            const minute = document.getElementById('minuteInput').value.trim().padStart(2, '0');
+            const ampm = document.getElementById('ampmSelect').value;
+            
+            container.innerHTML = "";
+            
+            if (files.length === 0) {
+                alert("Please upload at least 1 photo.");
+                return;
+            }
+            
+            // Build watermark text: DEC 10 2025, 10:30 AM
+            const watermark = `${monthName} ${parseInt(day)} ${year}, ${hour}:${minute} ${ampm}`;
+            
+            processBtn.disabled = true;
+            processBtn.textContent = "Processing...";
+            
+            let processed = 0;
+            
+            Array.from(files).forEach(file => {
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+                
+                img.onload = function () {
+                    const canvas = document.getElementById("canvas");
+                    const ctx = canvas.getContext("2d");
+                    
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const fontSize = Math.max(20, img.width * 0.03);
+                    ctx.font = `500 ${fontSize}px 'Inter', 'Roboto', sans-serif`;
+                    ctx.fillStyle = "white";
+                    ctx.strokeStyle = "rgba(0,0,0,0.5)";
+                    ctx.lineWidth = fontSize * 0.08;
+                    ctx.textAlign = "left";
+                    
+                    const x = fontSize * 0.5;
+                    const y = canvas.height - (fontSize * 0.5);
+                    
+                    ctx.strokeText(watermark, x, y);
+                    ctx.fillText(watermark, x, y);
+                    
+                    const finalImg = canvas.toDataURL("image/png");
+                    
+                    const card = document.createElement("div");
+                    card.className = "preview-card";
+                    card.innerHTML = `
+                        <img src="${finalImg}" alt="${file.name}">
+                        <div class="preview-info">
+                            <div class="filename" title="${file.name}">${file.name}</div>
+                            <a download="watermarked_${file.name}" href="${finalImg}">
+                                <button class="btn-download">Download</button>
+                            </a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                    
+                    processed++;
+                    if (processed === files.length) {
+                        processBtn.disabled = false;
+                        processBtn.textContent = "Add Watermark";
+                    }
+                    
+                    URL.revokeObjectURL(img.src);
+                };
+            });
+        }
+    </script>
 </body>
 </html>
