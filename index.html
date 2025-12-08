@@ -52,8 +52,8 @@
         }
         .upload-area {
             border: 2px dashed rgba(59, 130, 246, 0.5);
-            border-radius: 15px;
-            padding: 40px;
+            border-radius: 12px;
+            padding: 30px 40px;
             text-align: center;
             background: rgba(30, 41, 59, 0.4);
             transition: all 0.3s ease;
@@ -71,18 +71,18 @@
             border-color: #60a5fa;
         }
         .upload-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
             color: #3b82f6;
         }
         .upload-area h3 {
             color: #60a5fa;
-            font-size: 1.3rem;
-            margin-bottom: 8px;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
         }
         .upload-area p {
             color: #94a3b8;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         input[type="file"] {
             display: none;
@@ -99,12 +99,12 @@
         }
         input[type="text"], select {
             width: 100%;
-            padding: 14px 18px;
+            padding: 12px 14px;
             border: 1px solid rgba(59, 130, 246, 0.3);
             background: rgba(30, 41, 59, 0.5);
             color: #e0e7ff;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
             font-family: 'Roboto', sans-serif;
         }
@@ -113,8 +113,8 @@
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%2360a5fa' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 18px center;
-            padding-right: 45px;
+            background-position: right 12px center;
+            padding-right: 35px;
         }
         select option {
             background: #1e293b;
@@ -142,15 +142,20 @@
             margin-bottom: 15px;
             font-weight: 500;
         }
-        .row {
+        .datetime-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+            grid-template-columns: 80px 120px 100px 80px 80px 100px;
+            gap: 10px;
         }
-        .row-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        @media (max-width: 768px) {
+            .datetime-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .datetime-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         .btn {
             width: 100%;
@@ -302,38 +307,20 @@
         <div class="card">
             <div class="upload-area" id="uploadArea" onclick="document.getElementById('imageInput').click()">
                 <div class="upload-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                         <polyline points="17 8 12 3 7 8"></polyline>
                         <line x1="12" y1="3" x2="12" y2="15"></line>
                     </svg>
                 </div>
                 <h3>Choose or Drop Photos</h3>
-                <p>Support multiple images • PNG, JPG, JPEG</p>
                 <div class="file-count" id="fileCount"></div>
             </div>
             <input type="file" id="imageInput" accept="image/*" multiple>
             
             <div class="date-time-section">
                 <h3>Date & Time</h3>
-                <div class="row">
-                    <div class="input-group" style="margin-top: 0;">
-                        <label for="monthSelect">Month</label>
-                        <select id="monthSelect">
-                            <option value="01">January</option>
-                            <option value="02">February</option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                    </div>
+                <div class="datetime-row">
                     <div class="input-group" style="margin-top: 0;">
                         <label for="daySelect">Day</label>
                         <select id="daySelect">
@@ -341,18 +328,33 @@
                         </select>
                     </div>
                     <div class="input-group" style="margin-top: 0;">
+                        <label for="monthSelect">Month</label>
+                        <select id="monthSelect">
+                            <option value="01">JAN</option>
+                            <option value="02">FEB</option>
+                            <option value="03">MAR</option>
+                            <option value="04">APR</option>
+                            <option value="05">MAY</option>
+                            <option value="06">JUN</option>
+                            <option value="07">JUL</option>
+                            <option value="08">AUG</option>
+                            <option value="09">SEP</option>
+                            <option value="10">OCT</option>
+                            <option value="11">NOV</option>
+                            <option value="12">DEC</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="margin-top: 0;">
                         <label for="yearInput">Year</label>
                         <input type="text" id="yearInput" placeholder="2025" value="2025">
                     </div>
-                </div>
-                <div class="row" style="margin-top: 15px;">
                     <div class="input-group" style="margin-top: 0;">
                         <label for="hourInput">Hour</label>
-                        <input type="text" id="hourInput" placeholder="10" maxlength="2">
+                        <input type="text" id="hourInput" placeholder="09" maxlength="2">
                     </div>
                     <div class="input-group" style="margin-top: 0;">
                         <label for="minuteInput">Minute</label>
-                        <input type="text" id="minuteInput" placeholder="30" maxlength="2">
+                        <input type="text" id="minuteInput" placeholder="25" maxlength="2">
                     </div>
                     <div class="input-group" style="margin-top: 0;">
                         <label for="ampmSelect">AM/PM</label>
@@ -464,8 +466,8 @@
                 return;
             }
             
-            // Build watermark text: DEC 10 2025, 10:30 AM
-            const watermark = `${monthName} ${parseInt(day)} ${year}, ${hour}:${minute} ${ampm}`;
+            // Build watermark text: 08 DEC 2025, 09:25 AM
+            const watermark = `${day} ${monthName} ${year}, ${hour}:${minute} ${ampm}`;
             
             processBtn.disabled = true;
             processBtn.textContent = "Processing...";
