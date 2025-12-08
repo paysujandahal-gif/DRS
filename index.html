@@ -144,7 +144,7 @@
         }
         .datetime-row {
             display: grid;
-            grid-template-columns: 80px 120px 100px 80px 80px 100px;
+            grid-template-columns: 80px 120px 100px 80px 80px;
             gap: 10px;
         }
         @media (max-width: 768px) {
@@ -330,18 +330,18 @@
                     <div class="input-group" style="margin-top: 0;">
                         <label for="monthSelect">Month</label>
                         <select id="monthSelect">
-                            <option value="01">JAN</option>
-                            <option value="02">FEB</option>
-                            <option value="03">MAR</option>
-                            <option value="04">APR</option>
-                            <option value="05">MAY</option>
-                            <option value="06">JUN</option>
-                            <option value="07">JUL</option>
-                            <option value="08">AUG</option>
-                            <option value="09">SEP</option>
-                            <option value="10">OCT</option>
-                            <option value="11">NOV</option>
-                            <option value="12">DEC</option>
+                            <option value="01">Jan</option>
+                            <option value="02">Feb</option>
+                            <option value="03">Mar</option>
+                            <option value="04">Apr</option>
+                            <option value="05">May</option>
+                            <option value="06">Jun</option>
+                            <option value="07">Jul</option>
+                            <option value="08">Aug</option>
+                            <option value="09">Sep</option>
+                            <option value="10">Oct</option>
+                            <option value="11">Nov</option>
+                            <option value="12">Dec</option>
                         </select>
                     </div>
                     <div class="input-group" style="margin-top: 0;">
@@ -355,13 +355,6 @@
                     <div class="input-group" style="margin-top: 0;">
                         <label for="minuteInput">Minute</label>
                         <input type="text" id="minuteInput" placeholder="25" maxlength="2">
-                    </div>
-                    <div class="input-group" style="margin-top: 0;">
-                        <label for="ampmSelect">AM/PM</label>
-                        <select id="ampmSelect">
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -403,15 +396,8 @@
             monthSelect.value = String(now.getMonth() + 1).padStart(2, '0');
             daySelect.value = String(now.getDate()).padStart(2, '0');
             document.getElementById('yearInput').value = now.getFullYear();
-            
-            let hours = now.getHours();
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12; // 0 should be 12
-            
-            document.getElementById('hourInput').value = String(hours).padStart(2, '0');
+            document.getElementById('hourInput').value = String(now.getHours()).padStart(2, '0');
             document.getElementById('minuteInput').value = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('ampmSelect').value = ampm;
         }
         
         populateDays();
@@ -451,13 +437,12 @@
             
             // Get date and time values
             const monthNum = monthSelect.value;
-            const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             const monthName = monthNames[parseInt(monthNum) - 1];
             const day = daySelect.value;
             const year = document.getElementById('yearInput').value.trim();
             const hour = document.getElementById('hourInput').value.trim().padStart(2, '0');
             const minute = document.getElementById('minuteInput').value.trim().padStart(2, '0');
-            const ampm = document.getElementById('ampmSelect').value;
             
             container.innerHTML = "";
             
@@ -466,8 +451,8 @@
                 return;
             }
             
-            // Build watermark text: 08 DEC 2025, 09:25 AM
-            const watermark = `${day} ${monthName} ${year}, ${hour}:${minute} ${ampm}`;
+            // Build watermark text: 08 Dec 2025, 09:25
+            const watermark = `${day} ${monthName} ${year}, ${hour}:${minute}`;
             
             processBtn.disabled = true;
             processBtn.textContent = "Processing...";
