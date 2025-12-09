@@ -15,7 +15,27 @@
             background: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #034078 100%);
             min-height: 100vh;
             padding: 20px;
+            padding-bottom: 100px;
             color: #e0e7ff;
+            position: relative;
+        }
+        body.dragover::before {
+            content: 'Drop images anywhere';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(37, 99, 235, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: white;
+            pointer-events: none;
         }
         .container {
             max-width: 900px;
@@ -24,20 +44,20 @@
         .header {
             text-align: center;
             color: #ffffff;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             animation: fadeInDown 0.6s ease;
         }
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .header p {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             opacity: 0.8;
             color: #94a3b8;
         }
@@ -45,66 +65,135 @@
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 16px;
+            padding: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             animation: fadeInUp 0.6s ease;
         }
         .upload-area {
-            border: 2px dashed rgba(59, 130, 246, 0.5);
+            padding: 15px;
             border-radius: 12px;
-            padding: 30px 40px;
-            text-align: center;
             background: rgba(30, 41, 59, 0.4);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            text-align: center;
         }
-        .upload-area:hover {
-            border-color: #3b82f6;
-            background: rgba(30, 41, 59, 0.6);
-            transform: translateY(-2px);
-        }
-        .upload-area.dragover {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: #60a5fa;
-        }
-        .upload-icon {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
-            color: #3b82f6;
-        }
-        .upload-area h3 {
+        .upload-info h3 {
             color: #60a5fa;
-            font-size: 1.1rem;
-            margin-bottom: 6px;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            font-weight: 500;
         }
-        .upload-area p {
+        .upload-info p {
             color: #94a3b8;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        /* Floating Action Button */
+        .fab-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        .fab-main {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            border: none;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .fab-main:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.7);
+        }
+        .fab-main.active {
+            transform: rotate(45deg);
+        }
+        .fab-options {
+            position: absolute;
+            bottom: 75px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .fab-options.active {
+            opacity: 1;
+            pointer-events: all;
+            bottom: 80px;
+        }
+        .fab-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: white;
+            transform: scale(0);
+        }
+        .fab-options.active .fab-option {
+            transform: scale(1);
+        }
+        .fab-options.active .fab-option:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+        .fab-options.active .fab-option:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+        .fab-option:hover {
+            transform: scale(1.1);
+        }
+        .fab-gallery {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            box-shadow: 0 6px 15px rgba(139, 92, 246, 0.5);
+        }
+        .fab-gallery:hover {
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.7);
+        }
+        .fab-camera {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.5);
+        }
+        .fab-camera:hover {
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.7);
         }
         input[type="file"] {
             display: none;
         }
         .input-group {
-            margin-top: 25px;
+            margin-top: 15px;
         }
         .input-group label {
             display: block;
             font-weight: 500;
             color: #e0e7ff;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
         }
         input[type="text"], select {
             width: 100%;
-            padding: 12px 14px;
+            padding: 10px 12px;
             border: 1px solid rgba(59, 130, 246, 0.3);
             background: rgba(30, 41, 59, 0.5);
             color: #e0e7ff;
-            border-radius: 10px;
-            font-size: 0.95rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
             font-family: 'Roboto', sans-serif;
         }
@@ -132,14 +221,14 @@
         .date-time-section {
             background: rgba(30, 41, 59, 0.3);
             border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 25px;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
         }
         .date-time-section h3 {
             color: #60a5fa;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+            font-size: 1rem;
+            margin-bottom: 12px;
             font-weight: 500;
         }
         .datetime-row {
@@ -159,12 +248,12 @@
         }
         .btn {
             width: 100%;
-            padding: 16px;
-            margin-top: 20px;
-            font-size: 1.05rem;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 0.95rem;
             font-weight: 500;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Inter', sans-serif;
@@ -189,21 +278,21 @@
         }
         .btn-camera {
             width: 100%;
-            padding: 16px;
-            margin-top: 15px;
+            padding: 12px;
+            margin-top: 10px;
             background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 500;
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
         .btn-camera:hover {
             background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
@@ -214,7 +303,7 @@
             transform: translateY(0);
         }
         .preview-container {
-            margin-top: 30px;
+            margin-top: 20px;
             display: none;
         }
         .preview-container.active {
@@ -223,7 +312,7 @@
         .carousel-wrapper {
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             animation: scaleIn 0.4s ease;
@@ -250,21 +339,21 @@
             border-bottom: 1px solid rgba(59, 130, 246, 0.2);
         }
         .carousel-info {
-            padding: 15px;
+            padding: 12px;
             text-align: center;
         }
         .carousel-info .filename {
             font-weight: 500;
             color: #e0e7ff;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
         .carousel-counter {
             color: #94a3b8;
-            font-size: 0.85rem;
-            margin-top: 5px;
+            font-size: 0.8rem;
+            margin-top: 4px;
         }
         .carousel-nav {
             position: absolute;
@@ -273,8 +362,8 @@
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid rgba(59, 130, 246, 0.3);
             color: #60a5fa;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -300,13 +389,13 @@
         .carousel-dots {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            padding: 15px;
+            gap: 6px;
+            padding: 12px;
             background: rgba(30, 41, 59, 0.4);
         }
         .dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background: rgba(148, 163, 184, 0.4);
             cursor: pointer;
@@ -314,7 +403,7 @@
         }
         .dot.active {
             background: #3b82f6;
-            width: 24px;
+            width: 20px;
             border-radius: 4px;
         }
         .btn-download-all {
@@ -341,9 +430,9 @@
         }
         .file-count {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 8px;
             color: #94a3b8;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         .file-count strong {
             color: #60a5fa;
@@ -406,27 +495,15 @@
         </div>
         
         <div class="card">
-            <div class="upload-area" id="uploadArea" onclick="document.getElementById('imageInput').click()">
-                <div class="upload-icon">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-info">
+                    <h3>Drop Photos Here</h3>
+                    <p>Or use the + button below</p>
+                    <div class="file-count" id="fileCount"></div>
                 </div>
-                <h3>Choose or Drop Photos</h3>
-                <div class="file-count" id="fileCount"></div>
             </div>
-            <input type="file" id="imageInput" accept="image/*" multiple>
+            <input type="file" id="imageInput" accept="image/*" multiple style="display: none;">
             <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple style="display: none;">
-            
-            <button class="btn-camera" onclick="document.getElementById('cameraInput').click()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                    <circle cx="12" cy="13" r="4"></circle>
-                </svg>
-                Take Photos with Camera
-            </button>
             
             <div class="date-time-section">
                 <h3>Date & Time</h3>
@@ -477,9 +554,53 @@
         <div id="previewContainer" class="preview-container"></div>
     </div>
     
+    <!-- Floating Action Button -->
+    <div class="fab-container">
+        <div class="fab-options" id="fabOptions">
+            <button class="fab-option fab-gallery" onclick="document.getElementById('imageInput').click()" title="Choose from gallery">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+            </button>
+            <button class="fab-option fab-camera" onclick="document.getElementById('cameraInput').click()" title="Take photo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+            </button>
+        </div>
+        <button class="fab-main" id="fabMain" onclick="toggleFAB()">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+    </div>
+    
     <canvas id="canvas" style="display:none;"></canvas>
     
     <script>
+        function toggleFAB() {
+            const fabMain = document.getElementById('fabMain');
+            const fabOptions = document.getElementById('fabOptions');
+            
+            fabMain.classList.toggle('active');
+            fabOptions.classList.toggle('active');
+        }
+        
+        // Close FAB when clicking outside
+        document.addEventListener('click', (e) => {
+            const fabContainer = document.querySelector('.fab-container');
+            const fabMain = document.getElementById('fabMain');
+            const fabOptions = document.getElementById('fabOptions');
+            
+            if (!fabContainer.contains(e.target) && fabOptions.classList.contains('active')) {
+                fabMain.classList.remove('active');
+                fabOptions.classList.remove('active');
+            }
+        });
         const uploadArea = document.getElementById('uploadArea');
         const imageInput = document.getElementById('imageInput');
         const cameraInput = document.getElementById('cameraInput');
@@ -518,22 +639,43 @@
         populateDays();
         setCurrentDate();
         
-        uploadArea.addEventListener('dragover', (e) => {
+        // Whole page drag and drop
+        let dragCounter = 0;
+        
+        document.body.addEventListener('dragenter', (e) => {
             e.preventDefault();
-            uploadArea.classList.add('dragover');
+            dragCounter++;
+            document.body.classList.add('dragover');
         });
         
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
+        document.body.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dragCounter--;
+            if (dragCounter === 0) {
+                document.body.classList.remove('dragover');
+            }
         });
         
-        uploadArea.addEventListener('drop', (e) => {
+        document.body.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadArea.classList.remove('dragover');
+        });
+        
+        document.body.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dragCounter = 0;
+            document.body.classList.remove('dragover');
+            
             const files = e.dataTransfer.files;
-            imageInput.files = files;
-            updateFileCount();
+            if (files.length > 0) {
+                imageInput.files = files;
+                updateFileCount();
+            }
         });
+        
+        // Remove old upload area drag handlers
+        uploadArea.removeEventListener('dragover', () => {});
+        uploadArea.removeEventListener('dragleave', () => {});
+        uploadArea.removeEventListener('drop', () => {});
         
         imageInput.addEventListener('change', updateFileCount);
         cameraInput.addEventListener('change', (e) => {
@@ -746,17 +888,79 @@
             }
         }
         
-        function downloadAll() {
-            processedImages.forEach((img, index) => {
-                setTimeout(() => {
-                    const link = document.createElement('a');
-                    link.href = img.dataUrl;
-                    link.download = img.filename;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }, index * 200);
-            });
+        async function downloadAll() {
+            const downloadBtn = document.querySelector('.btn-download-all');
+            const originalText = downloadBtn.textContent;
+            
+            // Check if File System Access API is supported
+            if ('showDirectoryPicker' in window) {
+                try {
+                    downloadBtn.disabled = true;
+                    downloadBtn.textContent = 'Select folder to save...';
+                    
+                    // Let user pick a directory
+                    const dirHandle = await window.showDirectoryPicker();
+                    
+                    for (let i = 0; i < processedImages.length; i++) {
+                        const img = processedImages[i];
+                        downloadBtn.textContent = `Saving ${i + 1}/${processedImages.length}...`;
+                        
+                        // Convert dataURL to blob
+                        const response = await fetch(img.dataUrl);
+                        const blob = await response.blob();
+                        
+                        // Create file in selected directory
+                        const fileHandle = await dirHandle.getFileHandle(img.filename, { create: true });
+                        const writable = await fileHandle.createWritable();
+                        await writable.write(blob);
+                        await writable.close();
+                        
+                        // Small delay to prevent blocking
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+                    
+                    downloadBtn.disabled = false;
+                    downloadBtn.textContent = originalText;
+                    alert(`Successfully saved ${processedImages.length} images!`);
+                    
+                } catch (err) {
+                    // User cancelled or error occurred
+                    downloadBtn.disabled = false;
+                    downloadBtn.textContent = originalText;
+                    
+                    if (err.name !== 'AbortError') {
+                        alert('Error saving files. Using download instead...');
+                        downloadAllFallback();
+                    }
+                }
+            } else {
+                // Fallback for browsers that don't support File System Access API
+                downloadAllFallback();
+            }
+        }
+        
+        async function downloadAllFallback() {
+            const downloadBtn = document.querySelector('.btn-download-all');
+            const originalText = downloadBtn.textContent;
+            
+            downloadBtn.disabled = true;
+            
+            for (let i = 0; i < processedImages.length; i++) {
+                const img = processedImages[i];
+                downloadBtn.textContent = `Downloading ${i + 1}/${processedImages.length}...`;
+                
+                const link = document.createElement('a');
+                link.href = img.dataUrl;
+                link.download = img.filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                await new Promise(resolve => setTimeout(resolve, 800));
+            }
+            
+            downloadBtn.disabled = false;
+            downloadBtn.textContent = originalText;
         }
     </script>
 </body>
