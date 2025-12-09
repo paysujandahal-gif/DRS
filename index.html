@@ -187,57 +187,157 @@
             cursor: not-allowed;
             transform: none;
         }
-        .preview-grid {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+        .btn-camera {
+            width: 100%;
+            padding: 16px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        .preview-card {
+        .btn-camera:hover {
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+        }
+        .btn-camera:active {
+            transform: translateY(0);
+        }
+        .preview-container {
+            margin-top: 30px;
+            display: none;
+        }
+        .preview-container.active {
+            display: block;
+        }
+        .carousel-wrapper {
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid rgba(59, 130, 246, 0.2);
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
             animation: scaleIn 0.4s ease;
         }
-        .preview-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
-            border-color: rgba(59, 130, 246, 0.4);
-        }
-        .preview-card img {
+        .carousel {
+            position: relative;
             width: 100%;
+            overflow: hidden;
+            touch-action: pan-y pinch-zoom;
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.3s ease;
+        }
+        .carousel-slide {
+            min-width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: auto;
             display: block;
             border-bottom: 1px solid rgba(59, 130, 246, 0.2);
         }
-        .preview-info {
+        .carousel-info {
             padding: 15px;
+            text-align: center;
         }
-        .preview-info .filename {
+        .carousel-info .filename {
             font-weight: 500;
             color: #e0e7ff;
-            margin-bottom: 10px;
             font-size: 0.9rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .btn-download {
+        .carousel-counter {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .carousel-nav:hover {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: #60a5fa;
+        }
+        .carousel-nav.prev {
+            left: 10px;
+        }
+        .carousel-nav.next {
+            right: 10px;
+        }
+        .carousel-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 15px;
+            background: rgba(30, 41, 59, 0.4);
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(148, 163, 184, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .dot.active {
+            background: #3b82f6;
+            width: 24px;
+            border-radius: 4px;
+        }
+        .btn-download-all {
             width: 100%;
-            padding: 10px;
+            padding: 16px;
+            margin-top: 20px;
             background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 500;
+            font-size: 1.05rem;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
         }
-        .btn-download:hover {
+        .btn-download-all:hover {
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+        }
+        .btn-download-all:active {
+            transform: translateY(0);
         }
         .file-count {
             text-align: center;
@@ -288,11 +388,12 @@
             .upload-area {
                 padding: 30px 20px;
             }
-            .preview-grid {
-                grid-template-columns: 1fr;
-            }
             .row {
                 grid-template-columns: 1fr;
+            }
+            .carousel-nav {
+                width: 35px;
+                height: 35px;
             }
         }
     </style>
@@ -317,6 +418,15 @@
                 <div class="file-count" id="fileCount"></div>
             </div>
             <input type="file" id="imageInput" accept="image/*" multiple>
+            <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple style="display: none;">
+            
+            <button class="btn-camera" onclick="document.getElementById('cameraInput').click()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+                Take Photos with Camera
+            </button>
             
             <div class="date-time-section">
                 <h3>Date & Time</h3>
@@ -359,14 +469,12 @@
                 </div>
             </div>
             
-
-            
             <button class="btn btn-primary" id="processBtn" onclick="addWatermark()">
                 Add Watermark
             </button>
         </div>
         
-        <div id="previewContainer" class="preview-grid"></div>
+        <div id="previewContainer" class="preview-container"></div>
     </div>
     
     <canvas id="canvas" style="display:none;"></canvas>
@@ -374,10 +482,17 @@
     <script>
         const uploadArea = document.getElementById('uploadArea');
         const imageInput = document.getElementById('imageInput');
+        const cameraInput = document.getElementById('cameraInput');
         const fileCount = document.getElementById('fileCount');
         const processBtn = document.getElementById('processBtn');
         const daySelect = document.getElementById('daySelect');
         const monthSelect = document.getElementById('monthSelect');
+        
+        let processedImages = [];
+        let currentSlide = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let allFiles = [];
         
         // Populate days dropdown
         function populateDays() {
@@ -421,14 +536,30 @@
         });
         
         imageInput.addEventListener('change', updateFileCount);
+        cameraInput.addEventListener('change', (e) => {
+            // Merge camera files with existing files
+            const cameraFiles = Array.from(e.target.files);
+            allFiles = [...allFiles, ...cameraFiles];
+            syncFilesToInput();
+            updateFileCount();
+        });
         
         function updateFileCount() {
             const files = imageInput.files;
             if (files.length > 0) {
+                allFiles = Array.from(files);
                 fileCount.innerHTML = `<strong>${files.length}</strong> image${files.length > 1 ? 's' : ''} selected`;
+            } else if (allFiles.length > 0) {
+                fileCount.innerHTML = `<strong>${allFiles.length}</strong> image${allFiles.length > 1 ? 's' : ''} selected`;
             } else {
                 fileCount.innerHTML = '';
             }
+        }
+        
+        function syncFilesToInput() {
+            const dt = new DataTransfer();
+            allFiles.forEach(file => dt.items.add(file));
+            imageInput.files = dt.files;
         }
         
         function addWatermark() {
@@ -445,6 +576,8 @@
             const minute = document.getElementById('minuteInput').value.trim().padStart(2, '0');
             
             container.innerHTML = "";
+            processedImages = [];
+            currentSlide = 0;
             
             if (files.length === 0) {
                 alert("Please upload at least 1 photo.");
@@ -459,7 +592,7 @@
             
             let processed = 0;
             
-            Array.from(files).forEach(file => {
+            Array.from(files).forEach((file, index) => {
                 const img = new Image();
                 img.src = URL.createObjectURL(file);
                 
@@ -483,27 +616,146 @@
                     
                     const finalImg = canvas.toDataURL("image/png");
                     
-                    const card = document.createElement("div");
-                    card.className = "preview-card";
-                    card.innerHTML = `
-                        <img src="${finalImg}" alt="${file.name}">
-                        <div class="preview-info">
-                            <div class="filename" title="${file.name}">${file.name}</div>
-                            <a download="${file.name}" href="${finalImg}">
-                                <button class="btn-download">Download</button>
-                            </a>
-                        </div>
-                    `;
-                    container.appendChild(card);
+                    processedImages.push({
+                        dataUrl: finalImg,
+                        filename: file.name
+                    });
                     
                     processed++;
                     if (processed === files.length) {
+                        displayCarousel();
                         processBtn.disabled = false;
                         processBtn.textContent = "Add Watermark";
                     }
                     
                     URL.revokeObjectURL(img.src);
                 };
+            });
+        }
+        
+        function displayCarousel() {
+            const container = document.getElementById("previewContainer");
+            container.classList.add('active');
+            
+            let slidesHTML = '';
+            processedImages.forEach((img, index) => {
+                slidesHTML += `
+                    <div class="carousel-slide">
+                        <img src="${img.dataUrl}" alt="${img.filename}">
+                        <div class="carousel-info">
+                            <div class="filename" title="${img.filename}">${img.filename}</div>
+                            <div class="carousel-counter">${index + 1} of ${processedImages.length}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            let dotsHTML = '';
+            processedImages.forEach((_, index) => {
+                dotsHTML += `<span class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></span>`;
+            });
+            
+            container.innerHTML = `
+                <div class="carousel-wrapper">
+                    <div class="carousel" id="carousel">
+                        <button class="carousel-nav prev" onclick="prevSlide()" id="prevBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <button class="carousel-nav next" onclick="nextSlide()" id="nextBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                        <div class="carousel-track" id="carouselTrack">
+                            ${slidesHTML}
+                        </div>
+                    </div>
+                    <div class="carousel-dots" id="carouselDots">
+                        ${dotsHTML}
+                    </div>
+                </div>
+                <button class="btn-download-all" onclick="downloadAll()">
+                    Download All (${processedImages.length} images)
+                </button>
+            `;
+            
+            // Add touch event listeners
+            const carousel = document.getElementById('carousel');
+            carousel.addEventListener('touchstart', handleTouchStart, false);
+            carousel.addEventListener('touchmove', handleTouchMove, false);
+            carousel.addEventListener('touchend', handleTouchEnd, false);
+            
+            updateCarousel();
+        }
+        
+        function updateCarousel() {
+            const track = document.getElementById('carouselTrack');
+            const dots = document.querySelectorAll('.dot');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+            
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === processedImages.length - 1;
+        }
+        
+        function nextSlide() {
+            if (currentSlide < processedImages.length - 1) {
+                currentSlide++;
+                updateCarousel();
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateCarousel();
+            }
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+        
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }
+        
+        function handleTouchMove(e) {
+            touchEndX = e.changedTouches[0].screenX;
+        }
+        
+        function handleTouchEnd() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+        
+        function downloadAll() {
+            processedImages.forEach((img, index) => {
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.href = img.dataUrl;
+                    link.download = img.filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }, index * 200);
             });
         }
     </script>
