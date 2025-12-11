@@ -88,8 +88,6 @@
             font-size: 0.85rem;
             margin: 0;
         }
-        
-        /* Floating Action Button */
         .fab-container {
             position: fixed;
             bottom: 30px;
@@ -186,7 +184,7 @@
             margin-bottom: 6px;
             font-size: 0.85rem;
         }
-        input[type="text"], select {
+        input[type="text"], select, textarea {
             width: 100%;
             padding: 10px 12px;
             border: 1px solid rgba(59, 130, 246, 0.3);
@@ -209,14 +207,79 @@
             background: #1e293b;
             color: #e0e7ff;
         }
-        input[type="text"]::placeholder {
+        input[type="text"]::placeholder, textarea::placeholder {
             color: #64748b;
         }
-        input[type="text"]:focus, select:focus {
+        input[type="text"]:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #3b82f6;
             background: rgba(30, 41, 59, 0.7);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 38px;
+            height: 20px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            top: 1px;
+            left: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        input[type="checkbox"]:checked + .toggle-switch {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
+        }
+        input[type="checkbox"]:checked + .toggle-switch::before {
+            transform: translateX(18px);
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+        }
+        .toggle-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            transition: color 0.3s ease;
+        }
+        input[type="checkbox"]:checked ~ .toggle-label {
+            color: #60a5fa;
+        }
+        .toggle-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .settings-section {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .settings-section h3 {
+            color: #60a5fa;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            font-weight: 500;
         }
         .date-time-section {
             background: rgba(30, 41, 59, 0.3);
@@ -231,20 +294,157 @@
             margin-bottom: 12px;
             font-weight: 500;
         }
-        .datetime-row {
+        .settings-row {
             display: grid;
-            grid-template-columns: 80px 120px 100px 80px 80px;
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
-        @media (max-width: 768px) {
-            .datetime-row {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        .datetime-row {
+            display: grid;
+            grid-template-columns: 80px 120px 100px 80px 80px 80px;
+            gap: 10px;
         }
-        @media (max-width: 480px) {
-            .datetime-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .range-input {
+            width: 100%;
+        }
+        .range-input input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(30, 41, 59, 0.5);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .range-input input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .range-input input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .range-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .range-value {
+            color: #60a5fa;
+            font-weight: 500;
+            min-width: 40px;
+            text-align: right;
+        }
+        .color-input-wrapper {
+            position: relative;
+            height: 40px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            background: rgba(30, 41, 59, 0.5);
+            cursor: pointer;
+        }
+        .color-input-wrapper input[type="color"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: none;
+            cursor: pointer;
+            opacity: 0;
+        }
+        .color-preview {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+        .file-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .file-preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(30, 41, 59, 0.5);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+        .file-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .file-preview-remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.9);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            line-height: 1;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+        .file-preview-remove:hover {
+            background: rgba(220, 38, 38, 1);
+            transform: scale(1.1);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .format-toggle-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .format-toggle {
+            flex: 1;
+            padding: 8px;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 6px;
+            color: #94a3b8;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        .format-toggle.active {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            border-color: #3b82f6;
+            color: white;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
+        }
+        .format-toggle:hover:not(.active) {
+            border-color: #60a5fa;
+            color: #60a5fa;
         }
         .btn {
             width: 100%;
@@ -256,7 +456,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
         .btn-primary {
             background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
@@ -275,32 +475,6 @@
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
-        }
-        .btn-camera {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-camera:hover {
-            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
-        }
-        .btn-camera:active {
-            transform: translateY(0);
         }
         .preview-container {
             margin-top: 20px;
@@ -467,22 +641,29 @@
                 transform: scale(1);
             }
         }
-        @media (max-width: 600px) {
-            .header h1 {
-                font-size: 2rem;
+        @media (max-width: 768px) {
+            .datetime-row {
+                grid-template-columns: repeat(3, 1fr);
             }
-            .card {
-                padding: 20px;
-            }
-            .upload-area {
-                padding: 30px 20px;
-            }
-            .row {
+            .settings-row {
                 grid-template-columns: 1fr;
             }
+        }
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .card {
+                padding: 15px;
+            }
             .carousel-nav {
-                width: 35px;
-                height: 35px;
+                width: 32px;
+                height: 32px;
+            }
+        }
+        @media (max-width: 480px) {
+            .datetime-row {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -501,18 +682,76 @@
                     <p>Or use the + button below</p>
                     <div class="file-count" id="fileCount"></div>
                 </div>
+                <div class="file-preview-grid" id="filePreviewGrid"></div>
             </div>
-            <input type="file" id="imageInput" accept="image/*" multiple style="display: none;">
-            <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple style="display: none;">
+            <input type="file" id="imageInput" accept="image/*" multiple>
+            <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple>
+            
+            <div class="settings-section">
+                <h3>Watermark Settings</h3>
+                <div class="settings-row">
+                    <div class="input-group" style="margin-top: 0;">
+                        <label for="positionSelect">Position</label>
+                        <select id="positionSelect">
+                            <option value="bottom-left">Bottom Left</option>
+                            <option value="bottom-right">Bottom Right</option>
+                            <option value="top-left">Top Left</option>
+                            <option value="top-right">Top Right</option>
+                            <option value="center">Center</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="margin-top: 0;">
+                        <label for="formatSelect">Output Format</label>
+                        <select id="formatSelect">
+                            <option value="png">PNG (Best Quality)</option>
+                            <option value="jpeg">JPEG (Smaller Size)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="range-label">
+                        <label for="fontSizeSlider">Font Size</label>
+                        <span class="range-value" id="fontSizeValue">100%</span>
+                    </div>
+                    <div class="range-input">
+                        <input type="range" id="fontSizeSlider" min="50" max="200" value="100" step="10">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="range-label">
+                        <label for="opacitySlider">Opacity</label>
+                        <span class="range-value" id="opacityValue">100%</span>
+                    </div>
+                    <div class="range-input">
+                        <input type="range" id="opacitySlider" min="0" max="100" value="100" step="5">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="colorPicker">Text Color</label>
+                    <div class="color-input-wrapper" onclick="document.getElementById('colorPicker').click()">
+                        <input type="color" id="colorPicker" value="#ffffff">
+                        <div class="color-preview" id="colorPreview">#FFFFFF</div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="customText">Custom Text (Optional)</label>
+                    <textarea id="customText" placeholder="Add custom text instead of date/time..."></textarea>
+                </div>
+            </div>
             
             <div class="date-time-section">
-                <h3>Date & Time</h3>
-                <div class="datetime-row">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3 style="margin: 0;">Date & Time</h3>
+                    <label class="toggle-container">
+                        <input type="checkbox" id="realtimeToggle" class="toggle-input">
+                        <div class="toggle-switch"></div>
+                        <span class="toggle-label">Use Realtime</span>
+                    </label>
+                </div>
+                <div class="datetime-row" id="manualDateTime">
                     <div class="input-group" style="margin-top: 0;">
                         <label for="daySelect">Day</label>
-                        <select id="daySelect">
-                            <!-- Days will be populated by JavaScript -->
-                        </select>
+                        <select id="daySelect"></select>
                     </div>
                     <div class="input-group" style="margin-top: 0;">
                         <label for="monthSelect">Month</label>
@@ -543,10 +782,21 @@
                         <label for="minuteInput">Minute</label>
                         <input type="text" id="minuteInput" placeholder="25" maxlength="2">
                     </div>
+                    <div class="input-group" style="margin-top: 0;">
+                        <label for="secondInput">Second</label>
+                        <input type="text" id="secondInput" placeholder="00" maxlength="2" value="00">
+                    </div>
+                </div>
+                <div class="format-toggle-group">
+                    <div class="format-toggle active" id="format24h">24-Hour</div>
+                    <div class="format-toggle" id="format12h">12-Hour</div>
+                </div>
+                <div id="realtimeInfo" style="display: none; text-align: center; padding: 15px; color: #60a5fa; font-size: 0.9rem;">
+                    Each photo will be timestamped with the exact time it was added
                 </div>
             </div>
             
-            <button class="btn btn-primary" id="processBtn" onclick="addWatermark()">
+            <button class="btn btn-primary" id="processBtn">
                 Add Watermark
             </button>
         </div>
@@ -554,24 +804,23 @@
         <div id="previewContainer" class="preview-container"></div>
     </div>
     
-    <!-- Floating Action Button -->
     <div class="fab-container">
         <div class="fab-options" id="fabOptions">
-            <button class="fab-option fab-gallery" onclick="document.getElementById('imageInput').click()" title="Choose from gallery">
+            <button class="fab-option fab-gallery" title="Choose from gallery">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                     <circle cx="8.5" cy="8.5" r="1.5"></circle>
                     <polyline points="21 15 16 10 5 21"></polyline>
                 </svg>
             </button>
-            <button class="fab-option fab-camera" onclick="document.getElementById('cameraInput').click()" title="Take photo">
+            <button class="fab-option fab-camera" title="Take photo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
                     <circle cx="12" cy="13" r="4"></circle>
                 </svg>
             </button>
         </div>
-        <button class="fab-main" id="fabMain" onclick="toggleFAB()">
+        <button class="fab-main" id="fabMain">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -582,40 +831,69 @@
     <canvas id="canvas" style="display:none;"></canvas>
     
     <script>
-        function toggleFAB() {
-            const fabMain = document.getElementById('fabMain');
-            const fabOptions = document.getElementById('fabOptions');
-            
-            fabMain.classList.toggle('active');
-            fabOptions.classList.toggle('active');
-        }
-        
-        // Close FAB when clicking outside
-        document.addEventListener('click', (e) => {
-            const fabContainer = document.querySelector('.fab-container');
-            const fabMain = document.getElementById('fabMain');
-            const fabOptions = document.getElementById('fabOptions');
-            
-            if (!fabContainer.contains(e.target) && fabOptions.classList.contains('active')) {
-                fabMain.classList.remove('active');
-                fabOptions.classList.remove('active');
-            }
-        });
-        const uploadArea = document.getElementById('uploadArea');
         const imageInput = document.getElementById('imageInput');
         const cameraInput = document.getElementById('cameraInput');
         const fileCount = document.getElementById('fileCount');
         const processBtn = document.getElementById('processBtn');
         const daySelect = document.getElementById('daySelect');
         const monthSelect = document.getElementById('monthSelect');
+        const fabMain = document.getElementById('fabMain');
+        const fabOptions = document.getElementById('fabOptions');
+        const fabGallery = document.querySelector('.fab-gallery');
+        const fabCamera = document.querySelector('.fab-camera');
         
         let processedImages = [];
         let currentSlide = 0;
         let touchStartX = 0;
         let touchEndX = 0;
         let allFiles = [];
+        let fileTimestamps = new Map();
+        let timeFormat = '24h';
         
-        // Populate days dropdown
+        const realtimeToggle = document.getElementById('realtimeToggle');
+        const manualDateTime = document.getElementById('manualDateTime');
+        const realtimeInfo = document.getElementById('realtimeInfo');
+        const fontSizeSlider = document.getElementById('fontSizeSlider');
+        const fontSizeValue = document.getElementById('fontSizeValue');
+        const opacitySlider = document.getElementById('opacitySlider');
+        const opacityValue = document.getElementById('opacityValue');
+        const colorPicker = document.getElementById('colorPicker');
+        const colorPreview = document.getElementById('colorPreview');
+        const filePreviewGrid = document.getElementById('filePreviewGrid');
+        
+        fontSizeSlider.addEventListener('input', function() {
+            fontSizeValue.textContent = this.value + '%';
+        });
+        
+        opacitySlider.addEventListener('input', function() {
+            opacityValue.textContent = this.value + '%';
+        });
+        
+        colorPicker.addEventListener('input', function() {
+            const color = this.value;
+            colorPreview.style.color = color;
+            colorPreview.textContent = color.toUpperCase();
+        });
+        
+        document.getElementById('format24h').addEventListener('click', () => setTimeFormat('24h'));
+        document.getElementById('format12h').addEventListener('click', () => setTimeFormat('12h'));
+        
+        function setTimeFormat(format) {
+            timeFormat = format;
+            document.getElementById('format24h').classList.toggle('active', format === '24h');
+            document.getElementById('format12h').classList.toggle('active', format === '12h');
+        }
+        
+        realtimeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                manualDateTime.style.display = 'none';
+                realtimeInfo.style.display = 'block';
+            } else {
+                manualDateTime.style.display = 'grid';
+                realtimeInfo.style.display = 'none';
+            }
+        });
+        
         function populateDays() {
             daySelect.innerHTML = '';
             for (let i = 1; i <= 31; i++) {
@@ -626,7 +904,6 @@
             }
         }
         
-        // Initialize with current date
         function setCurrentDate() {
             const now = new Date();
             monthSelect.value = String(now.getMonth() + 1).padStart(2, '0');
@@ -634,12 +911,47 @@
             document.getElementById('yearInput').value = now.getFullYear();
             document.getElementById('hourInput').value = String(now.getHours()).padStart(2, '0');
             document.getElementById('minuteInput').value = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('secondInput').value = String(now.getSeconds()).padStart(2, '0');
         }
         
         populateDays();
         setCurrentDate();
         
-        // Whole page drag and drop
+        function renderFilePreviews() {
+            filePreviewGrid.innerHTML = '';
+            if (allFiles.length === 0) return;
+            
+            allFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'file-preview-item';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" alt="${file.name}">
+                        <button class="file-preview-remove" data-index="${index}" title="Remove">×</button>
+                    `;
+                    filePreviewGrid.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        filePreviewGrid.addEventListener('click', function(e) {
+            if (e.target.classList.contains('file-preview-remove')) {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                removeFile(index);
+            }
+        });
+        
+        function removeFile(index) {
+            allFiles.splice(index, 1);
+            const dt = new DataTransfer();
+            allFiles.forEach(file => dt.items.add(file));
+            imageInput.files = dt.files;
+            updateFileCount();
+            renderFilePreviews();
+        }
+        
         let dragCounter = 0;
         
         document.body.addEventListener('dragenter', (e) => {
@@ -665,25 +977,48 @@
             dragCounter = 0;
             document.body.classList.remove('dragover');
             
-            const files = e.dataTransfer.files;
+            const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+            const currentTime = new Date();
+            
             if (files.length > 0) {
-                imageInput.files = files;
+                files.forEach(file => {
+                    fileTimestamps.set(file, new Date(currentTime));
+                });
+                
+                const dt = new DataTransfer();
+                files.forEach(file => dt.items.add(file));
+                imageInput.files = dt.files;
+                allFiles = files;
                 updateFileCount();
+                renderFilePreviews();
             }
         });
         
-        // Remove old upload area drag handlers
-        uploadArea.removeEventListener('dragover', () => {});
-        uploadArea.removeEventListener('dragleave', () => {});
-        uploadArea.removeEventListener('drop', () => {});
+        imageInput.addEventListener('change', (e) => {
+            const newFiles = Array.from(e.target.files);
+            const currentTime = new Date();
+            
+            newFiles.forEach(file => {
+                fileTimestamps.set(file, new Date(currentTime));
+            });
+            
+            allFiles = newFiles;
+            updateFileCount();
+            renderFilePreviews();
+        });
         
-        imageInput.addEventListener('change', updateFileCount);
         cameraInput.addEventListener('change', (e) => {
-            // Merge camera files with existing files
             const cameraFiles = Array.from(e.target.files);
+            const currentTime = new Date();
+            
+            cameraFiles.forEach(file => {
+                fileTimestamps.set(file, new Date(currentTime));
+            });
+            
             allFiles = [...allFiles, ...cameraFiles];
             syncFilesToInput();
             updateFileCount();
+            renderFilePreviews();
         });
         
         function updateFileCount() {
@@ -704,18 +1039,34 @@
             imageInput.files = dt.files;
         }
         
+        fabMain.addEventListener('click', function() {
+            fabMain.classList.toggle('active');
+            fabOptions.classList.toggle('active');
+        });
+        
+        document.addEventListener('click', (e) => {
+            const fabContainer = document.querySelector('.fab-container');
+            if (!fabContainer.contains(e.target) && fabOptions.classList.contains('active')) {
+                fabMain.classList.remove('active');
+                fabOptions.classList.remove('active');
+            }
+        });
+        
+        fabGallery.addEventListener('click', () => imageInput.click());
+        fabCamera.addEventListener('click', () => cameraInput.click());
+        
+        processBtn.addEventListener('click', addWatermark);
+        
         function addWatermark() {
             const files = imageInput.files;
             const container = document.getElementById("previewContainer");
-            
-            // Get date and time values
-            const monthNum = monthSelect.value;
-            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            const monthName = monthNames[parseInt(monthNum) - 1];
-            const day = daySelect.value;
-            const year = document.getElementById('yearInput').value.trim();
-            const hour = document.getElementById('hourInput').value.trim().padStart(2, '0');
-            const minute = document.getElementById('minuteInput').value.trim().padStart(2, '0');
+            const useRealtime = realtimeToggle.checked;
+            const customText = document.getElementById('customText').value.trim();
+            const position = document.getElementById('positionSelect').value;
+            const fontSizeMultiplier = fontSizeSlider.value / 100;
+            const opacity = opacitySlider.value / 100;
+            const textColor = colorPicker.value;
+            const outputFormat = document.getElementById('formatSelect').value;
             
             container.innerHTML = "";
             processedImages = [];
@@ -726,15 +1077,12 @@
                 return;
             }
             
-            // Build watermark text: 08 Dec 2025, 09:25
-            const watermark = `${day} ${monthName} ${year}, ${hour}:${minute}`;
-            
             processBtn.disabled = true;
             processBtn.textContent = "Processing...";
             
             let processed = 0;
             
-            Array.from(files).forEach((file, index) => {
+            Array.from(files).forEach((file) => {
                 const img = new Image();
                 img.src = URL.createObjectURL(file);
                 
@@ -746,21 +1094,85 @@
                     canvas.height = img.height;
                     ctx.drawImage(img, 0, 0);
                     
-                    const fontSize = Math.max(20, img.width * 0.03) * 0.85;
-                    ctx.font = `700 ${fontSize}px 'Roboto', sans-serif`;
-                    ctx.fillStyle = "white";
-                    ctx.textAlign = "left";
+                    let watermark;
                     
-                    const x = fontSize * 0.5;
-                    const y = canvas.height - (fontSize * 0.5);
+                    if (customText) {
+                        watermark = customText;
+                    } else if (useRealtime && fileTimestamps.has(file)) {
+                        const timestamp = fileTimestamps.get(file);
+                        watermark = formatDateTime(timestamp);
+                    } else {
+                        const monthNum = monthSelect.value;
+                        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        const monthName = monthNames[parseInt(monthNum) - 1];
+                        const day = daySelect.value;
+                        const year = document.getElementById('yearInput').value.trim();
+                        const hour = parseInt(document.getElementById('hourInput').value.trim() || '0');
+                        const minute = document.getElementById('minuteInput').value.trim().padStart(2, '0');
+                        const second = document.getElementById('secondInput').value.trim().padStart(2, '0');
+                        
+                        if (timeFormat === '12h') {
+                            const period = hour >= 12 ? 'PM' : 'AM';
+                            const hour12 = hour % 12 || 12;
+                            watermark = `${day} ${monthName} ${year}, ${hour12}:${minute}:${second} ${period}`;
+                        } else {
+                            watermark = `${day} ${monthName} ${year}, ${String(hour).padStart(2, '0')}:${minute}:${second}`;
+                        }
+                    }
+                    
+                    const baseFontSize = Math.max(20, img.width * 0.03) * 0.85;
+                    const fontSize = baseFontSize * fontSizeMultiplier;
+                    ctx.font = `700 ${fontSize}px 'Roboto', sans-serif`;
+                    
+                    const r = parseInt(textColor.substr(1, 2), 16);
+                    const g = parseInt(textColor.substr(3, 2), 16);
+                    const b = parseInt(textColor.substr(5, 2), 16);
+                    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+                    
+                    const padding = fontSize * 0.5;
+                    let x, y;
+                    
+                    switch(position) {
+                        case 'bottom-left':
+                            ctx.textAlign = "left";
+                            x = padding;
+                            y = canvas.height - padding;
+                            break;
+                        case 'bottom-right':
+                            ctx.textAlign = "right";
+                            x = canvas.width - padding;
+                            y = canvas.height - padding;
+                            break;
+                        case 'top-left':
+                            ctx.textAlign = "left";
+                            x = padding;
+                            y = padding + fontSize;
+                            break;
+                        case 'top-right':
+                            ctx.textAlign = "right";
+                            x = canvas.width - padding;
+                            y = padding + fontSize;
+                            break;
+                        case 'center':
+                            ctx.textAlign = "center";
+                            x = canvas.width / 2;
+                            y = canvas.height / 2;
+                            break;
+                    }
                     
                     ctx.fillText(watermark, x, y);
                     
-                    const finalImg = canvas.toDataURL("image/png");
+                    const mimeType = outputFormat === 'jpeg' ? 'image/jpeg' : 'image/png';
+                    const quality = outputFormat === 'jpeg' ? 0.92 : undefined;
+                    const finalImg = canvas.toDataURL(mimeType, quality);
+                    
+                    const fileExt = outputFormat === 'jpeg' ? '.jpg' : '.png';
+                    const baseName = file.name.replace(/\.[^/.]+$/, '');
+                    const newFilename = baseName + fileExt;
                     
                     processedImages.push({
                         dataUrl: finalImg,
-                        filename: file.name
+                        filename: newFilename
                     });
                     
                     processed++;
@@ -773,6 +1185,24 @@
                     URL.revokeObjectURL(img.src);
                 };
             });
+        }
+        
+        function formatDateTime(date) {
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const day = String(date.getDate()).padStart(2, '0');
+            const monthName = monthNames[date.getMonth()];
+            const year = date.getFullYear();
+            const hour = date.getHours();
+            const minute = String(date.getMinutes()).padStart(2, '0');
+            const second = String(date.getSeconds()).padStart(2, '0');
+            
+            if (timeFormat === '12h') {
+                const period = hour >= 12 ? 'PM' : 'AM';
+                const hour12 = hour % 12 || 12;
+                return `${day} ${monthName} ${year}, ${hour12}:${minute}:${second} ${period}`;
+            } else {
+                return `${day} ${monthName} ${year}, ${String(hour).padStart(2, '0')}:${minute}:${second}`;
+            }
         }
         
         function displayCarousel() {
@@ -794,18 +1224,18 @@
             
             let dotsHTML = '';
             processedImages.forEach((_, index) => {
-                dotsHTML += `<span class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></span>`;
+                dotsHTML += `<span class="dot ${index === 0 ? 'active' : ''}" data-slide="${index}"></span>`;
             });
             
             container.innerHTML = `
                 <div class="carousel-wrapper">
                     <div class="carousel" id="carousel">
-                        <button class="carousel-nav prev" onclick="prevSlide()" id="prevBtn">
+                        <button class="carousel-nav prev" id="prevBtn">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="15 18 9 12 15 6"></polyline>
                             </svg>
                         </button>
-                        <button class="carousel-nav next" onclick="nextSlide()" id="nextBtn">
+                        <button class="carousel-nav next" id="nextBtn">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="9 18 15 12 9 6"></polyline>
                             </svg>
@@ -818,16 +1248,26 @@
                         ${dotsHTML}
                     </div>
                 </div>
-                <button class="btn-download-all" onclick="downloadAll()">
+                <button class="btn-download-all" id="downloadAllBtn">
                     Download All (${processedImages.length} images)
                 </button>
             `;
             
-            // Add touch event listeners
             const carousel = document.getElementById('carousel');
             carousel.addEventListener('touchstart', handleTouchStart, false);
             carousel.addEventListener('touchmove', handleTouchMove, false);
             carousel.addEventListener('touchend', handleTouchEnd, false);
+            
+            document.getElementById('prevBtn').addEventListener('click', prevSlide);
+            document.getElementById('nextBtn').addEventListener('click', nextSlide);
+            document.getElementById('downloadAllBtn').addEventListener('click', downloadAll);
+            
+            document.getElementById('carouselDots').addEventListener('click', (e) => {
+                if (e.target.classList.contains('dot')) {
+                    const index = parseInt(e.target.getAttribute('data-slide'));
+                    goToSlide(index);
+                }
+            });
             
             updateCarousel();
         }
@@ -889,33 +1329,28 @@
         }
         
         async function downloadAll() {
-            const downloadBtn = document.querySelector('.btn-download-all');
+            const downloadBtn = document.getElementById('downloadAllBtn');
             const originalText = downloadBtn.textContent;
             
-            // Check if File System Access API is supported
             if ('showDirectoryPicker' in window) {
                 try {
                     downloadBtn.disabled = true;
                     downloadBtn.textContent = 'Select folder to save...';
                     
-                    // Let user pick a directory
                     const dirHandle = await window.showDirectoryPicker();
                     
                     for (let i = 0; i < processedImages.length; i++) {
                         const img = processedImages[i];
                         downloadBtn.textContent = `Saving ${i + 1}/${processedImages.length}...`;
                         
-                        // Convert dataURL to blob
                         const response = await fetch(img.dataUrl);
                         const blob = await response.blob();
                         
-                        // Create file in selected directory
                         const fileHandle = await dirHandle.getFileHandle(img.filename, { create: true });
                         const writable = await fileHandle.createWritable();
                         await writable.write(blob);
                         await writable.close();
                         
-                        // Small delay to prevent blocking
                         await new Promise(resolve => setTimeout(resolve, 100));
                     }
                     
@@ -924,7 +1359,6 @@
                     alert(`Successfully saved ${processedImages.length} images!`);
                     
                 } catch (err) {
-                    // User cancelled or error occurred
                     downloadBtn.disabled = false;
                     downloadBtn.textContent = originalText;
                     
@@ -934,13 +1368,12 @@
                     }
                 }
             } else {
-                // Fallback for browsers that don't support File System Access API
                 downloadAllFallback();
             }
         }
         
         async function downloadAllFallback() {
-            const downloadBtn = document.querySelector('.btn-download-all');
+            const downloadBtn = document.getElementById('downloadAllBtn');
             const originalText = downloadBtn.textContent;
             
             downloadBtn.disabled = true;
